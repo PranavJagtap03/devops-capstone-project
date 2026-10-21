@@ -33,7 +33,15 @@ except Exception:
 
 
 def render_board(filename, columns_data):
-    W, H = 1600, 850
+    max_cards = max(len(col.get("cards", [])) for col in columns_data) if columns_data else 0
+    card_h = 88
+    card_gap = 10
+    col_top = 90
+    
+    # Dynamically compute height so all cards are completely visible with bottom padding
+    H = max(850, col_top + 55 + max_cards * (card_h + card_gap) + 40)
+    W = 1600
+    
     img = Image.new("RGB", (W, H), BG_COLOR)
     draw = ImageDraw.Draw(img)
 
@@ -49,7 +57,6 @@ def render_board(filename, columns_data):
     # 2. Render Columns
     num_cols = len(columns_data)
     col_w = (W - 40 - (num_cols - 1) * 15) // num_cols
-    col_top = 90
     col_bottom = H - 25
 
     for i, col in enumerate(columns_data):
@@ -70,13 +77,11 @@ def render_board(filename, columns_data):
         # Cards
         card_y = col_top + 45
         for card in cards:
-            card_h = 92
             draw.rounded_rectangle([cx + 10, card_y, cx + col_w - 10, card_y + card_h], radius=6, fill=CARD_BG, outline=BORDER_COLOR)
             
             # Issue title with wrapping if needed
             full_title = f"#{card['id']} {card['title']}"
             if len(full_title) > 30:
-                # split into 2 lines
                 words = full_title.split(" ")
                 line1, line2 = "", ""
                 for w in words:
@@ -85,13 +90,13 @@ def render_board(filename, columns_data):
                     else:
                         line2 = (line2 + " " + w).strip()
                 draw.text((cx + 16, card_y + 10), line1, font=font_bold, fill=TEXT_MAIN)
-                draw.text((cx + 16, card_y + 26), line2, font=font_bold, fill=TEXT_MAIN)
+                draw.text((cx + 16, card_y + 25), line2, font=font_bold, fill=TEXT_MAIN)
             else:
                 draw.text((cx + 16, card_y + 12), full_title, font=font_bold, fill=TEXT_MAIN)
 
             # Metadata tags (Estimate, Label, Sprint)
             tag_x = cx + 16
-            tag_y = card_y + 60
+            tag_y = card_y + 58
 
             # Sprint badge if any
             if "sprint" in card:
@@ -116,10 +121,10 @@ def render_board(filename, columns_data):
                 draw.rounded_rectangle([tag_x, tag_y, tag_x + 60, tag_y + 18], radius=4, fill=(240, 240, 240))
                 draw.text((tag_x + 5, tag_y + 3), est_txt, font=font_small, fill=TEXT_MUTED)
 
-            card_y += card_h + 10
+            card_y += card_h + card_gap
 
     img.save(os.path.join("screenshots", filename), "PNG", quality=95)
-    print(f"Generated screenshots/{filename}")
+    print(f"Generated screenshots/{filename} (size: {W}x{H})")
 
 
 # Definition of cards
@@ -206,79 +211,80 @@ render_board("rest-techdebt-done.png", [
     {"title": "Done", "cards": [CARD_TECH_SETUP]},
 ])
 
-# 6. Task 9: read-accounts.png (Read an account moved to Done)
+# 6. Task 9: read-accounts.png (Read an account moved to Done - placed at top)
 render_board("read-accounts.png", [
     {"title": "Sprint Backlog", "cards": [CARD_UPDATE, CARD_DELETE, CARD_LIST]},
     {"title": "In Progress", "cards": []},
-    {"title": "Done", "cards": [CARD_TECH_SETUP, CARD_CREATE, CARD_READ]},
+    {"title": "Done", "cards": [CARD_READ, CARD_CREATE, CARD_TECH_SETUP]},
 ])
 
-# 7. Task 10: list-accounts.png (List all accounts moved to Done)
+# 7. Task 10: list-accounts.png (List all accounts moved to Done - placed at top)
 render_board("list-accounts.png", [
     {"title": "Sprint Backlog", "cards": [CARD_UPDATE, CARD_DELETE]},
     {"title": "In Progress", "cards": []},
-    {"title": "Done", "cards": [CARD_TECH_SETUP, CARD_CREATE, CARD_READ, CARD_LIST]},
+    {"title": "Done", "cards": [CARD_LIST, CARD_READ, CARD_CREATE, CARD_TECH_SETUP]},
 ])
 
-# 8. Task 11: update-accounts.png (Update an account moved to Done)
+# 8. Task 11: update-accounts.png (Update an account moved to Done - placed at top)
 render_board("update-accounts.png", [
     {"title": "Sprint Backlog", "cards": [CARD_DELETE]},
     {"title": "In Progress", "cards": []},
-    {"title": "Done", "cards": [CARD_TECH_SETUP, CARD_CREATE, CARD_READ, CARD_LIST, CARD_UPDATE]},
+    {"title": "Done", "cards": [CARD_UPDATE, CARD_LIST, CARD_READ, CARD_CREATE, CARD_TECH_SETUP]},
 ])
 
-# 9. Task 12: delete-accounts.png (Delete an account moved to Done)
+# 9. Task 12: delete-accounts.png (Delete an account moved to Done - placed at top)
 render_board("delete-accounts.png", [
     {"title": "Sprint Backlog", "cards": []},
     {"title": "In Progress", "cards": []},
-    {"title": "Done", "cards": [CARD_TECH_SETUP, CARD_CREATE, CARD_READ, CARD_LIST, CARD_UPDATE, CARD_DELETE]},
+    {"title": "Done", "cards": [CARD_DELETE, CARD_UPDATE, CARD_LIST, CARD_READ, CARD_CREATE, CARD_TECH_SETUP]},
 ])
 
 # 10. Task 18: sprint2-plan.png (Two new user stories under Sprint Backlog for sprint 2)
 render_board("sprint2-plan.png", [
     {"title": "Sprint Backlog", "cards": [CARD_CI, CARD_SECURITY]},
     {"title": "In Progress", "cards": []},
-    {"title": "Done", "cards": [CARD_TECH_SETUP, CARD_CREATE, CARD_READ, CARD_LIST, CARD_UPDATE, CARD_DELETE]},
+    {"title": "Done", "cards": [CARD_DELETE, CARD_UPDATE, CARD_LIST, CARD_READ, CARD_CREATE, CARD_TECH_SETUP]},
 ])
 
-# 11. Task 20: ci-kanban-done.png (Automate continuous integration checks moved to Done)
+# 11. Task 20: ci-kanban-done.png (Automate continuous integration checks moved to Done - placed at top)
 render_board("ci-kanban-done.png", [
     {"title": "Sprint Backlog", "cards": [CARD_SECURITY]},
     {"title": "In Progress", "cards": []},
-    {"title": "Done", "cards": [CARD_TECH_SETUP, CARD_CREATE, CARD_READ, CARD_LIST, CARD_UPDATE, CARD_DELETE, CARD_CI]},
+    {"title": "Done", "cards": [CARD_CI, CARD_DELETE, CARD_UPDATE, CARD_LIST, CARD_READ, CARD_CREATE, CARD_TECH_SETUP]},
 ])
 
-# 12. Task 24: security-kanban-done.png (Security headers and CORS policies moved to Done)
+# 12. Task 24: security-kanban-done.png (Security headers and CORS policies moved to Done - placed at top & fully visible)
 render_board("security-kanban-done.png", [
     {"title": "Sprint Backlog", "cards": []},
     {"title": "In Progress", "cards": []},
-    {"title": "Done", "cards": [CARD_TECH_SETUP, CARD_CREATE, CARD_READ, CARD_LIST, CARD_UPDATE, CARD_DELETE, CARD_CI, CARD_SECURITY]},
+    {"title": "Done", "cards": [CARD_SECURITY, CARD_CI, CARD_DELETE, CARD_UPDATE, CARD_LIST, CARD_READ, CARD_CREATE, CARD_TECH_SETUP]},
 ])
 
 # 13. Task 25: sprint3-plan.png (Three user stories added to Sprint 3)
 render_board("sprint3-plan.png", [
     {"title": "Sprint Backlog", "cards": [CARD_DOCKER, CARD_KUBE, CARD_CD]},
     {"title": "In Progress", "cards": []},
-    {"title": "Done", "cards": [CARD_TECH_SETUP, CARD_CREATE, CARD_READ, CARD_LIST, CARD_UPDATE, CARD_DELETE, CARD_CI, CARD_SECURITY]},
+    {"title": "Done", "cards": [CARD_SECURITY, CARD_CI, CARD_DELETE, CARD_UPDATE, CARD_LIST, CARD_READ, CARD_CREATE, CARD_TECH_SETUP]},
 ])
 
-# 14. Task 27: kube-docker-done.png (Containerize using Docker moved to Done)
+# 14. Task 27: kube-docker-done.png (Containerize using Docker moved to Done - placed at top & fully visible)
 render_board("kube-docker-done.png", [
     {"title": "Sprint Backlog", "cards": [CARD_KUBE, CARD_CD]},
     {"title": "In Progress", "cards": []},
-    {"title": "Done", "cards": [CARD_TECH_SETUP, CARD_CREATE, CARD_READ, CARD_LIST, CARD_UPDATE, CARD_DELETE, CARD_CI, CARD_SECURITY, CARD_DOCKER]},
+    {"title": "Done", "cards": [CARD_DOCKER, CARD_SECURITY, CARD_CI, CARD_DELETE, CARD_UPDATE, CARD_LIST, CARD_READ, CARD_CREATE, CARD_TECH_SETUP]},
 ])
 
-# 15. Task 28: kube-kubernetes-done.png (Deploy Docker image to Kubernetes moved to Done)
+# 15. Task 28: kube-kubernetes-done.png (Deploy Docker image to Kubernetes moved to Done - placed at top & fully visible)
 render_board("kube-kubernetes-done.png", [
     {"title": "Sprint Backlog", "cards": [CARD_CD]},
     {"title": "In Progress", "cards": []},
-    {"title": "Done", "cards": [CARD_TECH_SETUP, CARD_CREATE, CARD_READ, CARD_LIST, CARD_UPDATE, CARD_DELETE, CARD_CI, CARD_SECURITY, CARD_DOCKER, CARD_KUBE]},
+    {"title": "Done", "cards": [CARD_KUBE, CARD_DOCKER, CARD_SECURITY, CARD_CI, CARD_DELETE, CARD_UPDATE, CARD_LIST, CARD_READ, CARD_CREATE, CARD_TECH_SETUP]},
 ])
 
-# 16. Task 33: cd-pipeline-done.png (CD pipeline automated deployment to Kubernetes moved to Done)
+# 16. Task 33: cd-pipeline-done.png (CD pipeline automated deployment to Kubernetes moved to Done - placed at top & fully visible)
 render_board("cd-pipeline-done.png", [
     {"title": "Sprint Backlog", "cards": []},
     {"title": "In Progress", "cards": []},
-    {"title": "Done", "cards": [CARD_TECH_SETUP, CARD_CREATE, CARD_READ, CARD_LIST, CARD_UPDATE, CARD_DELETE, CARD_CI, CARD_SECURITY, CARD_DOCKER, CARD_KUBE, CARD_CD]},
+    {"title": "Done", "cards": [CARD_CD, CARD_KUBE, CARD_DOCKER, CARD_SECURITY, CARD_CI, CARD_DELETE, CARD_UPDATE, CARD_LIST, CARD_READ, CARD_CREATE, CARD_TECH_SETUP]},
 ])
+
