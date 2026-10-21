@@ -1,0 +1,27 @@
+nosetests
+
+Account Service Tests
+- It should not Allow an illegal method call
+- It should Create a new Account
+- It should not Create an Account that already exists
+- It should Delete an Account
+- It should Get a list of Accounts
+- It should Read a single Account
+- It should not Read an Account that is not found
+- It should Update an existing Account
+- It should not Update an Account that is not found
+- It should return security headers
+- It should return CORS security headers
+
+Name                   Stmts   Miss  Cover   Missing
+----------------------------------------------------
+service/__init__.py       21      0   100%
+service/common/status.py  45      0   100%
+service/models.py         58      0   100%
+service/routes.py         68      0   100%
+----------------------------------------------------
+TOTAL                    192      0   100%
+----------------------------------------------------------------------
+Ran 11 tests in 1.341s
+
+OK

@@ -1,0 +1,7 @@
+curl -X DELETE http://localhost:8080/accounts/1 \
+  -v
+
+< HTTP/1.1 204 NO CONTENT
+< Content-Type: text/html; charset=utf-8
+< Server: gunicorn
+<

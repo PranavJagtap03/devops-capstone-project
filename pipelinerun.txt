@@ -1,0 +1,91 @@
+[init : remove] Removing all files from /workspace/source ...
+
+[clone : clone] + '[' false '=' true ]
+[clone : clone] + '[' false '=' true ]
+[clone : clone] + '[' false '=' true ]
+[clone : clone] + CHECKOUT_DIR=/workspace/output/
+[clone : clone] + '[' true '=' true ]
+[clone : clone] + cleandir
+[clone : clone] + '[' -d /workspace/output/ ]
+[clone : clone] + rm -rf '/workspace/output//*'
+[clone : clone] + rm -rf '/workspace/output//.[!.]*'
+[clone : clone] + rm -rf '/workspace/output//..?*'
+[clone : clone] + test -z 
+[clone : clone] + test -z 
+[clone : clone] + test -z 
+[clone : clone] + git config --global --add safe.directory /workspace/output
+[clone : clone] + /ko-app/git-init '-url=https://github.com/PranavJagtap03/devops-capstone-project.git' '-revision=cd-pipeline' '-refspec=' '-path=/workspace/output/' '-sslVerify=true' '-submodules=true' '-depth=1' '-sparseCheckoutDirectories='
+[clone : clone] {"level":"info","ts":1683431302.3165283,"caller":"git/git.go:176","msg":"Successfully cloned https://github.com/PranavJagtap03/devops-capstone-project.git @ 09ed4f20e46f9c980211c4f8226243473ce95156 (grafted, HEAD, origin/cd-pipeline) in path /workspace/output/"}
+[clone : clone] {"level":"info","ts":1683431302.404481,"caller":"git/git.go:215","msg":"Successfully initialized and updated submodules in path /workspace/output/"}
+[clone : clone] + cd /workspace/output/
+[clone : clone] + git rev-parse HEAD
+[clone : clone] + RESULT_SHA=09ed4f20e46f9c980211c4f8226243473ce95156
+[clone : clone] + EXIT_CODE=0
+[clone : clone] + '[' 0 '!=' 0 ]
+[clone : clone] + git log -1 '--pretty=%ct'
+[clone : clone] + RESULT_COMMITTER_DATE=1683431242
+[clone : clone] + printf '%s' 1683431242
+[clone : clone] + printf '%s' 09ed4f20e46f9c980211c4f8226243473ce95156
+[clone : clone] + printf '%s' https://github.com/PranavJagtap03/devops-capstone-project.git
+
+[lint : flake8] Collecting Werkzeug==2.2.2
+[lint : flake8]   Downloading Werkzeug-2.2.2-py3-none-any.whl (232 kB)
+[lint : flake8]      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 232.7/232.7 KB 50.6 MB/s eta 0:00:00
+[lint : flake8] Collecting Flask==2.2.2
+[lint : flake8]   Downloading Flask-2.2.2-py3-none-any.whl (101 kB)
+[lint : flake8]      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 101.5/101.5 KB 52.7 MB/s eta 0:00:00
+[lint : flake8] Collecting Flask-SQLAlchemy==3.0.2
+[lint : flake8]   Downloading Flask_SQLAlchemy-3.0.2-py3-none-any.whl (24 kB)
+[lint : flake8] Collecting Flask-Talisman==0.8.0
+[lint : flake8]   Downloading flask_talisman-0.8.0-py2.py3-none-any.whl (18 kB)
+[lint : flake8] Collecting Flask-Cors==3.0.10
+[lint : flake8]   Downloading Flask_Cors-3.0.10-py2.py3-none-any.whl (14 kB)
+[lint : flake8] Collecting psycopg2-binary==2.9.5
+[lint : flake8]   Downloading psycopg2_binary-2.9.5-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.0 MB)
+[lint : flake8]      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.0/3.0 MB 91.1 MB/s eta 0:00:00
+[lint : flake8] Collecting python-dotenv==0.21.1
+[lint : flake8]   Downloading python_dotenv-0.21.1-py3-none-any.whl (19 kB)
+[lint : flake8] Collecting gunicorn==20.1.0
+[lint : flake8]   Downloading gunicorn-20.1.0-py3-none-any.whl (79 kB)
+[lint : flake8]      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 79.5/79.5 KB 42.0 MB/s eta 0:00:00
+[lint : flake8] Collecting honcho==1.1.0
+[lint : flake8]   Downloading honcho-1.1.0-py2.py3-none-any.whl (21 kB)
+[lint : flake8] Collecting pylint==2.15.10
+[lint : flake8]   Downloading pylint-2.15.10-py3-none-any.whl (509 kB)
+[lint : flake8]      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 509.9/509.9 KB 74.7 MB/s eta 0:00:00
+[lint : flake8] Collecting flake8==6.0.0
+[lint : flake8]   Downloading flake8-6.0.0-py2.py3-none-any.whl (57 kB)
+[lint : flake8]      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 57.8/57.8 KB 28.4 MB/s eta 0:00:00
+[lint : flake8] Collecting black==22.3.0
+[lint : flake8] flake8 service --count --select=E9,F63,F7,F82 --show-source --statistics
+[lint : flake8] 0
+[lint : flake8] flake8 service --count --max-complexity=10 --max-line-length=127 --statistics
+[lint : flake8] 0
+
+[tests : nosetests] Account Service Tests
+[tests : nosetests] - It should not Allow an illegal method call
+[tests : nosetests] - It should Create a new Account
+[tests : nosetests] - It should not Create an Account that already exists
+[tests : nosetests] - It should Delete an Account
+[tests : nosetests] - It should Get a list of Accounts
+[tests : nosetests] - It should Read a single Account
+[tests : nosetests] - It should not Read an Account that is not found
+[tests : nosetests] - It should Update an existing Account
+[tests : nosetests] - It should not Update an Account that is not found
+[tests : nosetests] - It should return security headers
+[tests : nosetests] - It should return CORS security headers
+[tests : nosetests] Ran 11 tests in 1.250s
+[tests : nosetests] OK
+
+[build : buildah] STEP 1/7: FROM python:3.9-slim
+[build : buildah] STEP 2/7: WORKDIR /app
+[build : buildah] STEP 3/7: COPY requirements.txt .
+[build : buildah] STEP 4/7: RUN pip install --no-cache-dir -r requirements.txt
+[build : buildah] STEP 5/7: COPY service/ ./service/
+[build : buildah] STEP 6/7: RUN useradd --uid 1000 theia && chown -R theia /app
+[build : buildah] STEP 7/7: USER theia
+[build : buildah] COMMIT accounts:latest
+[build : buildah] Successfully tagged accounts:latest
+
+[deploy : kubectl] deployment.apps/accounts configured
+[deploy : kubectl] service/accounts unchanged
