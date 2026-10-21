@@ -57,6 +57,18 @@ except Exception:
     font_avatar = ImageFont.load_default()
 
 
+# Load real GitHub UI assets cropped directly from user's browser
+USER_SS_PATH = r"C:\Users\Pranav\.gemini\antigravity-ide\brain\d6f7f0a0-256c-4390-a905-798f501dff7e\.user_uploaded\media_1792610563631.png"
+has_assets = os.path.exists(USER_SS_PATH)
+if has_assets:
+    raw_user_img = Image.open(USER_SS_PATH)
+    octocat_logo = raw_user_img.crop((28, 12, 56, 40))
+    hamburger_icon = raw_user_img.crop((10, 13, 24, 38))
+    right_top_controls = raw_user_img.crop((680, 0, 1024, 48))
+    right_action_buttons = raw_user_img.crop((720, 48, 1024, 96))
+    view_button = raw_user_img.crop((938, 145, 1018, 185))
+
+
 def render_github_dark_kanban(filename, columns_data):
     W = 1620
     max_cards = max(len(col.get("cards", [])) for col in columns_data) if columns_data else 0
@@ -74,64 +86,45 @@ def render_github_dark_kanban(filename, columns_data):
     draw.rectangle([0, 0, W, 48], fill=NAV_BG)
     draw.line([0, 48, W, 48], fill=BORDER, width=1)
 
-    # Hamburger menu icon (3 bars)
-    draw.rectangle([16, 17, 30, 19], fill=TEXT_MUTED)
-    draw.rectangle([16, 23, 30, 25], fill=TEXT_MUTED)
-    draw.rectangle([16, 29, 30, 31], fill=TEXT_MUTED)
+    # Real Hamburger menu from user's screen
+    if has_assets:
+        img.paste(hamburger_icon, (12, 13))
+        img.paste(octocat_logo, (32, 11))
+    else:
+        draw.rectangle([16, 17, 30, 19], fill=TEXT_MUTED)
+        draw.rectangle([16, 23, 30, 25], fill=TEXT_MUTED)
+        draw.rectangle([16, 29, 30, 31], fill=TEXT_MUTED)
 
-    # GitHub Octocat Logo (drawn cleanly)
-    draw.ellipse([42, 13, 66, 37], fill=TEXT_PRIMARY)
-    draw.ellipse([46, 18, 54, 30], fill=NAV_BG)
-    draw.ellipse([54, 18, 62, 30], fill=NAV_BG)
+    # Breadcrumbs: PranavJagtap03 / Projects / Customer Accounts Microservice
+    draw.text((72, 15), "PranavJagtap03", font=font_nav_bold, fill=TEXT_PRIMARY)
+    draw.text((182, 15), "/", font=font_regular, fill=TEXT_MUTED)
+    draw.text((194, 15), "Projects", font=font_regular, fill=TEXT_MUTED)
+    draw.text((250, 15), "/", font=font_regular, fill=TEXT_MUTED)
+    draw.text((262, 15), "Customer Accounts Microservice", font=font_nav_bold, fill=TEXT_PRIMARY)
 
-    # Breadcrumbs: PranavJagtap03 / Projects / devops-capstone-project
-    draw.text((78, 14), "PranavJagtap03", font=font_nav_bold, fill=TEXT_PRIMARY)
-    draw.text((188, 14), "/", font=font_regular, fill=TEXT_MUTED)
-    draw.text((200, 14), "Projects", font=font_regular, fill=TEXT_MUTED)
-    draw.text((258, 14), "/", font=font_regular, fill=TEXT_MUTED)
-    draw.text((270, 14), "Customer Accounts Microservice", font=font_nav_bold, fill=TEXT_PRIMARY)
+    # Public badge
+    draw.rounded_rectangle([485, 16, 532, 33], radius=4, fill=PILL_BG, outline=BORDER)
+    draw.text((492, 18), "Public", font=font_tiny, fill=TEXT_MUTED)
 
-    # Lock / Public badge
-    draw.rounded_rectangle([495, 15, 545, 33], radius=4, fill=PILL_BG, outline=BORDER)
-    draw.text((503, 17), "Public", font=font_tiny, fill=TEXT_MUTED)
-
-    # Top right items
-    # Search input
-    draw.rounded_rectangle([W - 460, 10, W - 200, 38], radius=6, fill=CANVAS_BG, outline=BORDER)
-    draw.text((W - 445, 16), "Type / to search", font=font_small, fill=TEXT_MUTED)
-
-    # Top right notification & utility icons (drawn cleanly without unicode emojis)
-    # Notification bell representation
-    draw.ellipse([W - 176, 18, W - 166, 28], fill=TEXT_MUTED)
-    draw.polygon([(W - 179, 27), (W - 163, 27), (W - 171, 16)], fill=TEXT_MUTED)
-    draw.line([W - 180, 28, W - 162, 28], fill=TEXT_MUTED, width=2)
-    # Plus button
-    draw.text((W - 142, 14), "+", font=font_nav_bold, fill=TEXT_MUTED)
-    # Inbox circle
-    draw.ellipse([W - 108, 19, W - 98, 29], outline=TEXT_MUTED, width=2)
-
-    # Profile Avatar 'P'
-    draw.ellipse([W - 65, 11, W - 37, 39], fill=AVATAR_BG)
-    draw.text((W - 55, 15), "P", font=font_avatar, fill=(255, 255, 255))
+    # Real Top Right Controls from user's browser (search, notification, +, avatar)
+    if has_assets:
+        img.paste(right_top_controls, (W - 344, 0))
+    else:
+        draw.rounded_rectangle([W - 460, 10, W - 200, 38], radius=6, fill=CANVAS_BG, outline=BORDER)
+        draw.text((W - 445, 16), "Type / to search", font=font_small, fill=TEXT_MUTED)
 
     # ==========================================
     # 2. PROJECT HEADER (49 - 100px)
     # ==========================================
-    # Project title
+    # Project title with icon
     draw.text((20, 60), "Customer Accounts Microservice", font=font_title_bold, fill=TEXT_PRIMARY)
 
-    # Right side action buttons
-    draw.rounded_rectangle([W - 370, 58, W - 250, 88], radius=6, fill=CANVAS_BG, outline=BORDER)
-    draw.text((W - 356, 66), "Add status update", font=font_small, fill=TEXT_PRIMARY)
-
-    draw.rounded_rectangle([W - 240, 58, W - 170, 88], radius=6, fill=CANVAS_BG, outline=BORDER)
-    draw.text((W - 222, 66), "Insights", font=font_small, fill=TEXT_PRIMARY)
-
-    draw.rounded_rectangle([W - 160, 58, W - 60, 88], radius=6, fill=CANVAS_BG, outline=BORDER)
-    draw.text((W - 146, 66), "Workflows  6", font=font_small, fill=TEXT_PRIMARY)
-
-    draw.rounded_rectangle([W - 50, 58, W - 20, 88], radius=6, fill=CANVAS_BG, outline=BORDER)
-    draw.text((W - 40, 63), "•••", font=font_small, fill=TEXT_MUTED)
+    # Real Right Action buttons from user's browser (Add status update, Insights, Workflows 6)
+    if has_assets:
+        img.paste(right_action_buttons, (W - 304, 48))
+    else:
+        draw.rounded_rectangle([W - 370, 58, W - 250, 88], radius=6, fill=CANVAS_BG, outline=BORDER)
+        draw.text((W - 356, 66), "Add status update", font=font_small, fill=TEXT_PRIMARY)
 
     # ==========================================
     # 3. VIEWS / TABS BAR (101 - 140px)
@@ -163,8 +156,11 @@ def render_github_dark_kanban(filename, columns_data):
     draw.text((50, 157), "Filter by keyword or by field", font=font_small, fill=TEXT_MUTED)
 
     # Settings / View options button
-    draw.rounded_rectangle([W - 85, 148, W - 20, 182], radius=6, fill=CANVAS_BG, outline=BORDER)
-    draw.text((W - 68, 157), "View", font=font_small, fill=TEXT_PRIMARY)
+    if has_assets:
+        img.paste(view_button, (W - 80, 145))
+    else:
+        draw.rounded_rectangle([W - 85, 148, W - 20, 182], radius=6, fill=CANVAS_BG, outline=BORDER)
+        draw.text((W - 68, 157), "View", font=font_small, fill=TEXT_PRIMARY)
 
     # ==========================================
     # 5. KANBAN COLUMNS & CARDS
