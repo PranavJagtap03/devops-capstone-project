@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: accounts
-        image: us.icr.io/$SN_ICR_NAMESPACE/accounts:1
+        image: us.icr.io/sn-labs-pranavjagta2/accounts:1
         ports:
         - containerPort: 8080
         env:
