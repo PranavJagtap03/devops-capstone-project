@@ -5,7 +5,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the application contents
+# Copy all application files from the service directory into the image
 COPY service/ ./service/
 
 # Switch to a non-root user
