@@ -19,7 +19,7 @@ spec:
         - containerPort: 8080
         env:
         - name: DATABASE_URI
-          value: "sqlite:///accounts.db"
+          value: "sqlite:////tmp/accounts.db"
 ---
 apiVersion: v1
 kind: Service
